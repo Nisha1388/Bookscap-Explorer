@@ -3,69 +3,7 @@
 import pandas as pd
 import sqlite3
 import matplotlib.pyplot as plt
-#import seaborn as sns
 import streamlit as st
-#import pymysql
-
-# Load the cleaned data into the SQLite database
-df = pd.read_json('F:/mini_project2/cleaned_books_data.json')
-
-# Create SQLite database and table
-conn = sqlite3.connect("books_database.db")
-cursor = conn.cursor()
-
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS books (
-    book_id VARCHAR PRIMARY KEY,
-    search_key VARCHAR,
-    book_title VARCHAR,
-    book_subtitle TEXT,
-    book_authors TEXT,
-    book_publisher TEXT,
-    book_description TEXT,
-    industryIdentifiers TEXT,
-    text_readingModes BOOLEAN,
-    image_readingModes BOOLEAN,
-    pageCount INT,
-    categories TEXT,
-    language VARCHAR,
-    imageLinks TEXT,
-    ratingsCount INT,
-    averageRating DECIMAL,
-    country VARCHAR,
-    saleability VARCHAR,
-    isEbook BOOLEAN,
-    amount_listPrice DECIMAL,
-    currencyCode_listPrice VARCHAR,
-    amount_retailPrice DECIMAL,
-    currencyCode_retailPrice VARCHAR,
-    buyLink TEXT,
-    year TEXT
-)
-''')
-
-# Insert data into the database
-for index, row in df.iterrows():
-    cursor.execute('''
-    INSERT OR IGNORE INTO books (
-        book_id, search_key, book_title, book_subtitle, book_authors, book_publisher,
-        book_description, industryIdentifiers, text_readingModes,
-        image_readingModes, pageCount, categories, language, imageLinks,
-        ratingsCount, averageRating, country, saleability, isEbook,
-        amount_listPrice, currencyCode_listPrice, amount_retailPrice,
-        currencyCode_retailPrice, buyLink, year
-    ) VALUES (
-        :book_id, :search_key, :book_title, :book_subtitle, :book_authors, :book_publisher,
-        :book_description, :industryIdentifiers, :text_readingModes,
-        :image_readingModes, :pageCount, :categories, :language, :imageLinks,
-        :ratingsCount, :averageRating, :country, :saleability, :isEbook,
-        :amount_listPrice, :currencyCode_listPrice, :amount_retailPrice,
-        :currencyCode_retailPrice, :buyLink, :year
-    )
-    ''', row.to_dict())
-
-# Commit and close the connection
-conn.commit()
 
 # Streamlit App Layout
 st.title("Books Data Analysis")
@@ -135,7 +73,7 @@ question = st.selectbox(
      "20. Publisher with the Highest Average Rating Among Publishers with More than 10 Books"]
 )
 
-# Connect to the database again to execute the selected query
+# Connect to the database to execute the selected query
 conn = sqlite3.connect("books_database.db")
 cursor = conn.cursor()
 
